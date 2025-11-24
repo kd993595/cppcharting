@@ -7,6 +7,10 @@
 
 namespace graphlib {
 
+enum class Orientation {
+    Vertical,
+    Horizontal
+};
 
 class BarPlot {
 public:
@@ -14,6 +18,7 @@ public:
     std::vector<double> y_values;
     std::string title = "Bar Plot";
     std::vector<Color> colors;
+    Orientation orientation = Orientation::Vertical;
 
     BarPlot() = default;
 

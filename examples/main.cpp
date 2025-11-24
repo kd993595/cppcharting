@@ -16,5 +16,6 @@ int main() {
     // Set custom colors
     plot.colors = {RED, YELLOW, GREEN, ORANGE};
 
+    plot.orientation = graphlib::Orientation::Horizontal;
     plot.show();
 }
