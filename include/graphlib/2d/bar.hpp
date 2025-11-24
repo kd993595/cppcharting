@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <graphlib/core/concepts.hpp>
+#include <graphlib/2d/plot.hpp>
 #include <raylib.h>
 
 namespace graphlib {
@@ -12,7 +13,7 @@ enum class Orientation {
     Horizontal
 };
 
-class BarPlot {
+class BarPlot : public Plot {
 public:
     std::vector<std::string> x_labels;  // categorical
     std::vector<double> y_values;
@@ -22,7 +23,7 @@ public:
 
     BarPlot() = default;
 
-    void show() const;
+    void show() const override;
 };
 
 template <graphlib::StringIterator XIt, graphlib::NumericIterator YIt>
