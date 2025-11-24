@@ -10,8 +10,8 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 # Library sources
 add_library(graphlib
-    src/core/graph.cpp
     src/2d/bar.cpp
+    src/2d/area.cpp
 )
 
 find_package(raylib REQUIRED)
@@ -25,6 +25,9 @@ target_include_directories(graphlib
 # Link raylib to the library
 target_link_libraries(graphlib PUBLIC raylib)
 
-# Example executable (optional)
-add_executable(demo examples/main.cpp)
-target_link_libraries(demo PRIVATE graphlib raylib)
+# Example executables
+add_executable(bar_example examples/bar_example.cpp)
+target_link_libraries(bar_example PRIVATE graphlib raylib)
+
+add_executable(area_example examples/area_example.cpp)
+target_link_libraries(area_example PRIVATE graphlib raylib)
