@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <graphlib/core/concepts.hpp>
+#include <raylib.h>
 
 namespace graphlib {
 
@@ -11,6 +12,8 @@ class BarPlot {
 public:
     std::vector<std::string> x_labels;  // categorical
     std::vector<double> y_values;
+    std::string title = "Bar Plot";
+    std::vector<Color> colors;
 
     BarPlot() = default;
 
@@ -26,6 +29,8 @@ BarPlot bar(XIt x_begin, XIt x_end, YIt y_begin, YIt y_end) {
 
     for (auto it = y_begin; it != y_end; ++it)
         plot.y_values.push_back(static_cast<double>(*it));
+
+    plot.colors.resize(plot.y_values.size(), BLUE);
 
     return plot;
 }
