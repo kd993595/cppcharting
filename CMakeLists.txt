@@ -1,0 +1,33 @@
+cmake_minimum_required(VERSION 3.20)
+project(graphlib LANGUAGES CXX)
+
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+# Use C++20
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+# Library sources
+add_library(graphlib
+    src/2d/bar.cpp
+    src/2d/area.cpp
+)
+
+find_package(raylib REQUIRED)
+
+# Header include directory
+target_include_directories(graphlib
+    PUBLIC
+        ${PROJECT_SOURCE_DIR}/include
+)
+
+# Link raylib to the library
+target_link_libraries(graphlib PUBLIC raylib)
+
+# Example executables
+add_executable(bar_example examples/bar_example.cpp)
+target_link_libraries(bar_example PRIVATE graphlib raylib)
+
+add_executable(area_example examples/area_example.cpp)
+target_link_libraries(area_example PRIVATE graphlib raylib)
