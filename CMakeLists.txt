@@ -12,6 +12,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 add_library(graphlib
     src/2d/bar.cpp
     src/2d/area.cpp
+    src/2d/scatter.cpp
 )
 
 find_package(raylib REQUIRED)
@@ -31,3 +32,6 @@ target_link_libraries(bar_example PRIVATE graphlib raylib)
 
 add_executable(area_example examples/area_example.cpp)
 target_link_libraries(area_example PRIVATE graphlib raylib)
+
+add_executable(scatter_example examples/scatter_example.cpp)
+target_link_libraries(scatter_example PRIVATE graphlib raylib)
