@@ -53,15 +53,15 @@ public:
     double diff_x = std::round((double)(maxX - minX) / 10);
     double diff_y = std::round((double)(maxY - minY) / 10);
 
-    for(size_t i=0;i<9;i++){
-      std::string x_num = std::to_string(std::lround((double)minX + i*diff_x));
-      x_axis.push_back({GetScreenX((double)min_x + i*diff_x), screenHeight - bottom_pad + 10, x_num});
+    for(double cur_diff=min_x;  cur_diff < max_x; cur_diff += diff_x){
+      std::string x_num = std::to_string(std::lround(cur_diff));
+      x_axis.push_back({GetScreenX(cur_diff), screenHeight - bottom_pad + 10, x_num});
     }
     x_axis.push_back({GetScreenX(max_x), screenHeight - bottom_pad + 10, std::to_string(maxX)});
 
-    for(size_t i=0;i<9;i++){
-      std::string y_num = std::to_string(std::lround((double)minY + i*diff_y));
-      y_axis.push_back({left_pad - 25, GetScreenY((double)min_y + i*diff_y), y_num});
+    for(double cur_diff=min_y; cur_diff < max_y; cur_diff += diff_y){
+      std::string y_num = std::to_string(std::lround(cur_diff));
+      y_axis.push_back({left_pad - 25, GetScreenY(cur_diff), y_num});
     }
     y_axis.push_back({left_pad - 25, GetScreenY(max_y), std::to_string(maxY)});
   }
