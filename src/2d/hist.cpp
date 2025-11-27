@@ -2,6 +2,8 @@
 #include <cmath>
 #include <graphlib/2d/hist.hpp>
 
+namespace graphlib{
+
 void HistPlot::show() const{
     int win_width = 800;
     int win_height = 600;
@@ -32,6 +34,7 @@ void HistPlot::show() const{
     while (!WindowShouldClose()){
         BeginDrawing();
         ClearBackground(RAYWHITE);
+        DrawText(title.c_str(), win_width / 2 - MeasureText(title.c_str(), 30) / 2, 20, 30, BLACK);
 
         int horiz_padding = 50; /* for one side */
         int vertical_padding = 50; /* for one side */
@@ -46,10 +49,10 @@ void HistPlot::show() const{
         /* x-axis */
         DrawLine(horiz_padding, win_height - vertical_padding, win_width - horiz_padding, win_height - vertical_padding, BLACK);
 
-        for (int i = 0; i < bin_count; ++i){
-            auto it_max_bin_count = std::max_element(bins.begin(), bins.end());
-            int max_bin_count = *it_max_bin_count;
+        auto it_max_bin_count = std::max_element(bins.begin(), bins.end());
+        int max_bin_count = *it_max_bin_count;
 
+        for (int i = 0; i < bin_count; ++i){
             /* pixels are only integers; round up to ensure visibility for even small heights */
             /* scaled relative to max bin */
             int bin_height = std::round((bins[i] / static_cast<double>(max_bin_count)) * plot_height);
@@ -60,7 +63,31 @@ void HistPlot::show() const{
             /* draw the bin */
             DrawRectangle(bin_x, bin_y, bin_size, bin_height, color);
         }
+
+        /* y-axis ticks */
+        int y_tick_segments = max_bin_count < 6 ? max_bin_count : 6; /* tick count is +1 of this */
+        for (int i = 0; i < y_tick_segments + 1; ++i){
+            double portion = i / static_cast<double>(y_tick_segments);
+            int tick_y = (win_height - vertical_padding) - portion * plot_height;
+            int tick_val = portion * max_bin_count;
+
+            DrawLine(horiz_padding - 10, tick_y, horiz_padding, tick_y, BLACK);
+            DrawText(std::to_string(tick_val).c_str(), horiz_padding - 35, tick_y - 6, 14, BLACK);
+        }
+
+        /* x-axis ticks */
+        int x_tick_segments = bin_count; /* tick count is +1 of this */
+        for (int i = 0; i < x_tick_segments + 1; ++i){
+            double portion = i / static_cast<double>(x_tick_segments);
+            int tick_x = horiz_padding + i * bin_size;
+            int tick_val = min_val + i * bin_width;
+
+            DrawLine(tick_x, win_height - vertical_padding, tick_x, win_height - vertical_padding + 10, BLACK);
+            DrawText(std::to_string(tick_val).c_str(), tick_x - 3, win_height - vertical_padding + 20, 14, BLACK);
+        }
         EndDrawing();
     }
     CloseWindow();
+}
+
 }

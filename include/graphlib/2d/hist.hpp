@@ -6,6 +6,8 @@
 #include <raylib.h>
 #include <vector>
 
+namespace graphlib{
+
 class HistPlot : public graphlib::Plot{
 public:
     std::vector<double> values;
@@ -26,5 +28,7 @@ HistPlot hist(nit start, nit end, double width = 1.0){
         plot.values.push_back(*it);
     }
     return plot;
+}
+
 }
 #endif
