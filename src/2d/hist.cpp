@@ -17,10 +17,11 @@ void HistPlot::show() const{
     double max_val = *it_max_val;
 
     double min_max_range = max_val - min_val;
-    int bin_count = std::ceil(min_max_range / bin_width);
+    double bin_width = min_max_range / bin_count;
 
-    /* need to give one bin when min_val == max_val */
-    bin_count = min_val == max_val ? 1 : bin_count;
+    /* need to give bin some width when min_val == max_val */
+    bin_width = min_val == max_val ? 1 : bin_width;
+
     std::vector<int> bins(bin_count, 0);
 
     for (auto& value : values){
@@ -72,7 +73,7 @@ void HistPlot::show() const{
             int tick_val = portion * max_bin_count;
 
             DrawLine(horiz_padding - 10, tick_y, horiz_padding, tick_y, BLACK);
-            DrawText(std::to_string(tick_val).c_str(), horiz_padding - 35, tick_y - 6, 14, BLACK);
+            DrawText(std::to_string(tick_val).c_str(), horiz_padding - 35, tick_y - 6, 16, BLACK);
         }
 
         /* x-axis ticks */
@@ -80,10 +81,17 @@ void HistPlot::show() const{
         for (int i = 0; i < x_tick_segments + 1; ++i){
             double portion = i / static_cast<double>(x_tick_segments);
             int tick_x = horiz_padding + i * bin_size;
-            int tick_val = min_val + i * bin_width;
+            double tick_val = min_val + i * bin_width;
 
             DrawLine(tick_x, win_height - vertical_padding, tick_x, win_height - vertical_padding + 10, BLACK);
-            DrawText(std::to_string(tick_val).c_str(), tick_x - 3, win_height - vertical_padding + 20, 14, BLACK);
+
+            /* see if the tick_val stores an integer or an actual decimal */
+            if (tick_val == std::floor(tick_val)){
+                DrawText(std::to_string(static_cast<int>(tick_val)).c_str(), tick_x - 3, win_height - vertical_padding + 20, 16, BLACK);
+            }
+            else{
+                DrawText(TextFormat("%.1f", tick_val), tick_x - 8, win_height - vertical_padding + 20, 16, BLACK);
+            }
         }
         EndDrawing();
     }
