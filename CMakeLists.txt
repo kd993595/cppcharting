@@ -14,6 +14,7 @@ add_library(graphlib
     src/2d/area.cpp
     src/2d/scatter.cpp
     src/2d/hist.cpp
+    src/2d/box.cpp
 )
 
 find_package(raylib REQUIRED)
@@ -39,3 +40,6 @@ target_link_libraries(scatter_example PRIVATE graphlib raylib)
 
 add_executable(hist_example examples/hist_example.cpp)
 target_link_libraries(hist_example PRIVATE graphlib raylib)
+
+add_executable(box_example examples/box_example.cpp)
+target_link_libraries(box_example PRIVATE graphlib raylib)
