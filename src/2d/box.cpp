@@ -72,6 +72,27 @@ void BoxPlot::show() const{
         /* draw the max */
         DrawLine(horiz_middle - 25, vertical_padding, horiz_middle + 25, vertical_padding, color);
 
+        /* connect the min and max to the box */
+        DrawLine(horiz_middle, win_height - vertical_padding, horiz_middle, q1_y, color);
+        DrawLine(horiz_middle, vertical_padding, horiz_middle, q3_y, color);
+
+        /* y-axis ticks */
+        int y_tick_segments = 6; /* tick count is +1 of this */
+        for (int i = 0; i < y_tick_segments + 1; ++i){
+            double portion = i / static_cast<double>(y_tick_segments);
+            int tick_y = (win_height - vertical_padding) - portion * plot_height;
+            double tick_val = min + portion * range;
+
+            DrawLine(horiz_padding - 10, tick_y, horiz_padding, tick_y, BLACK);
+
+            /* see if the tick_val stores an integer or an actual decimal */
+            if (tick_val == std::floor(tick_val)){
+                DrawText(std::to_string(static_cast<int>(tick_val)).c_str(), horiz_padding - 45, tick_y - 6, 16, BLACK);
+            }
+            else{
+                DrawText(TextFormat("%.1f", tick_val), horiz_padding - 50, tick_y - 6, 16, BLACK);
+            }
+        }
         EndDrawing();
     }
     CloseWindow();
