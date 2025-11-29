@@ -1,5 +1,5 @@
-#ifndef GRAPHLIB_2D_BOX_HPP
-#define GRAPHLIB_2D_BOX_HPP
+#ifndef GRAPHLIB_2D_PIE_HPP
+#define GRAPHLIB_2D_PIE_HPP
 
 #include <graphlib/core/concepts.hpp>
 #include <graphlib/2d/plot.hpp>
@@ -8,7 +8,7 @@
 
 namespace graphlib{
 
-class BoxPlot : public Plot{
+class PiePlot : public Plot{
 public:
     std::vector<double> values;
     std::string title = "Title";
@@ -19,8 +19,8 @@ public:
 };
 
 template <graphlib::NumericIterator nit>
-BoxPlot box(nit start, nit end){
-    BoxPlot plot;
+PiePlot pie(nit start, nit end){
+    PiePlot plot;
 
     for (auto it = start; it != end; ++it){
         plot.values.push_back(*it);
