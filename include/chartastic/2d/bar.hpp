@@ -2,11 +2,11 @@
 #define GRAPHLIB_2D_BAR_HPP
 
 #include <vector>
-#include <graphlib/core/concepts.hpp>
-#include <graphlib/2d/plot.hpp>
+#include <chartastic/core/concepts.hpp>
+#include <chartastic/2d/plot.hpp>
 #include <raylib.h>
 
-namespace graphlib {
+namespace chartastic {
 
 enum class Orientation {
     Vertical,
@@ -26,7 +26,7 @@ public:
     void show() const override;
 };
 
-template <graphlib::StringIterator XIt, graphlib::NumericIterator YIt>
+template <chartastic::StringIterator XIt, chartastic::NumericIterator YIt>
 BarPlot bar(XIt x_begin, XIt x_end, YIt y_begin, YIt y_end) {
     BarPlot plot;
 

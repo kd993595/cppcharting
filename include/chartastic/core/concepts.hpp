@@ -4,7 +4,7 @@
 #pragma once
 #include <iterator>
 
-namespace graphlib {
+namespace chartastic {
 
 // Numeric iterator
 template <typename It>

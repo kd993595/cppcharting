@@ -5,9 +5,9 @@
 #include <vector>
 #include <string>
 #include <raylib.h>
-#include <graphlib/2d/plot.hpp>
+#include <chartastic/2d/plot.hpp>
 
-namespace graphlib {
+namespace chartastic {
 
 class AreaPlot : public Plot {
 public:

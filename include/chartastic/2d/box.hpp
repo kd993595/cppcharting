@@ -1,14 +1,14 @@
-#ifndef GRAPHLIB_2D_PIE_HPP
-#define GRAPHLIB_2D_PIE_HPP
+#ifndef GRAPHLIB_2D_BOX_HPP
+#define GRAPHLIB_2D_BOX_HPP
 
-#include <graphlib/core/concepts.hpp>
-#include <graphlib/2d/plot.hpp>
+#include <chartastic/core/concepts.hpp>
+#include <chartastic/2d/plot.hpp>
 #include <raylib.h>
 #include <vector>
 
-namespace graphlib{
+namespace chartastic {
 
-class PiePlot : public Plot{
+class BoxPlot : public Plot{
 public:
     std::vector<double> values;
     std::string title = "Title";
@@ -18,9 +18,9 @@ public:
     void show() const override;
 };
 
-template <graphlib::NumericIterator nit>
-PiePlot pie(nit start, nit end){
-    PiePlot plot;
+template <chartastic::NumericIterator nit>
+BoxPlot box(nit start, nit end){
+    BoxPlot plot;
 
     for (auto it = start; it != end; ++it){
         plot.values.push_back(*it);

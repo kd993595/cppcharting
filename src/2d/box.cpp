@@ -1,8 +1,8 @@
 #include <algorithm>
 #include <cmath>
-#include <graphlib/2d/box.hpp>
+#include <chartastic/2d/box.hpp>
 
-namespace graphlib{
+namespace chartastic {
 
 /* assumes that vec is already sorted */
 double get_percentile(const std::vector<double>& vec, double q){

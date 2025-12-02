@@ -1,8 +1,8 @@
 #include <algorithm>
 #include <cmath>
-#include <graphlib/2d/hist.hpp>
+#include <chartastic/2d/hist.hpp>
 
-namespace graphlib{
+namespace chartastic {
 
 void HistPlot::show() const{
     int win_width = 800;

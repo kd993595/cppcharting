@@ -1,5 +1,5 @@
-#ifndef GRAPHLIB_2D_SCATTER
-#define GRAPHLIB_2D_SCATTER
+#ifndef GRAPHLIB_2D_LINE
+#define GRAPHLIB_2D_LINE
 
 #include <raylib.h>
 #include <string>
@@ -11,15 +11,16 @@
 #include <iostream>
 #include <cmath>
 #include <tuple>
+#include <chartastic/core/concepts.hpp>
 
 
 template<typename T>
 concept ForwardIteratorNumeric = std::forward_iterator<T> && std::is_integral<typename std::iterator_traits<T>::value_type>::value;
 
 
-namespace graphlib {
+namespace chartastic {
 
-class Scatter{
+class Line{
   std::string title;
   std::vector<std::pair<int, int>> points;
   std::vector<std::tuple<int, int, std::string>> x_axis;
@@ -47,7 +48,7 @@ class Scatter{
   }
 
 public:
-  explicit Scatter(std::string t, int minX, int maxX, int minY, int maxY) : 
+  explicit Line(std::string t, int minX, int maxX, int minY, int maxY) : 
     title(t), points(), x_axis(), y_axis(), min_x(minX), max_x(maxX), min_y(minY), max_y(maxY)
   {
     double diff_x = std::round((double)(maxX - minX) / 10);
@@ -66,35 +67,40 @@ public:
     y_axis.push_back({left_pad - 25, GetScreenY(max_y), std::to_string(maxY)});
   }
 
-  template<ForwardIteratorNumeric Iter>
-  void addScatter(Iter x_begin, Iter x_end, Iter y_begin, Iter y_end){
+  template<chartastic::NumericIterator Iter>
+  void addLine(Iter x_begin, Iter x_end, Iter y_begin, Iter y_end){
     if(x_begin == x_end || y_begin == y_end)
       throw std::length_error("cannot input empty iterators");
+
+    double previous = *x_begin;
+    points.push_back({GetScreenX((double)*x_begin), GetScreenY((double)*y_begin)});
+
+    ++x_begin;
+    ++y_begin;
+    if(x_begin == x_end || y_begin == y_end)
+      throw std::length_error("line plot must have at least 2 points");
 
     while(x_begin != x_end){
       if(y_begin == y_end){
         throw std::length_error("y vector does not match x vector length");
       }
 
-      points.push_back({GetScreenX((double)*x_begin), GetScreenY((double)*y_begin)});
+      double temp_x = *x_begin;
+      if(temp_x <= previous)
+        throw std::invalid_argument("x variables must be increasing cannot have line go backwards");
+      previous = temp_x;
+
+      points.push_back({GetScreenX(temp_x), GetScreenY((double)*y_begin)});
 
       ++x_begin;
       ++y_begin;
     }
     if(y_begin != y_end){
-      throw std::length_error("x vector smaller than y vector");
+      throw std::length_error("x vector smaller than y vector must be equal length");
     }
   }
 
   void show() const{
-    // const int screenWidth = 1600;
-    // const int screenHeight = 1200;
-    //
-    // const int left_pad = 100;
-    // const int right_pad = 50;
-    // const int top_pad = 100;
-    // const int bottom_pad = 80;
-
     InitWindow(screenWidth, screenHeight, "Chartastic");
     SetTargetFPS(60);
 
@@ -106,9 +112,11 @@ public:
       DrawText(title.c_str(), screenWidth / 2 - MeasureText(title.c_str(), 30) / 2, 20, 30, BLACK);
 
       
-      // Draw Points
-      for(size_t i=0;i<points.size();i++){
-       DrawCircle(points[i].first, points[i].second, 10, SKYBLUE);
+      // Draw Lines
+      for(size_t i=0;i<points.size()-1;i++){
+        Vector2 startpos = {static_cast<float>(points[i].first), static_cast<float>(points[i].second)};
+        Vector2 endpos = {static_cast<float>(points[i+1].first), static_cast<float>(points[i+1].second)};
+        DrawLineEx(startpos, endpos, 5.,SKYBLUE);
       }
       
       
@@ -127,12 +135,10 @@ public:
       EndDrawing();
     }
 
-    // De-Initialization
-    //--------------------------------------------------------------------------------------
     CloseWindow();
   }
 
 };
 
 }
-#endif // Scatter Plot header
+#endif // GRAPHLIB_2D_LINE

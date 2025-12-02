@@ -1,5 +1,5 @@
-#include <graphlib/2d/scatter.hpp>
+#include <chartastic/2d/scatter.hpp>
 
-namespace graphlib {
+namespace chartastic {
   
 }

@@ -1,9 +1,9 @@
 #include <algorithm>
-#include <graphlib/2d/area.hpp>
+#include <chartastic/2d/area.hpp>
 #include <raylib.h>
 #include <string>
 
-namespace graphlib {
+namespace chartastic {
 
 void AreaPlot::show() const {
 	const int width = 800;

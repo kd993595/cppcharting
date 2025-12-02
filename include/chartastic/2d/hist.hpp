@@ -2,14 +2,14 @@
 #define GRAPHLIB_2D_HIST_HPP
 
 #include <cmath>
-#include <graphlib/core/concepts.hpp>
-#include <graphlib/2d/plot.hpp>
+#include <chartastic/core/concepts.hpp>
+#include <chartastic/2d/plot.hpp>
 #include <raylib.h>
 #include <vector>
 
-namespace graphlib{
+namespace chartastic {
 
-class HistPlot : public graphlib::Plot{
+class HistPlot : public chartastic::Plot{
 public:
     std::vector<double> values;
     std::string title = "Title";
@@ -20,7 +20,7 @@ public:
     void show() const override;
 };
 
-template <graphlib::NumericIterator nit>
+template <chartastic::NumericIterator nit>
 HistPlot hist(nit start, nit end, double count = 0){
     HistPlot plot;
 

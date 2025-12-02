@@ -1,9 +1,9 @@
 #include <cmath>
-#include <graphlib/2d/pie.hpp>
+#include <chartastic/2d/pie.hpp>
 #include <map>
 #include <numbers>
 
-namespace graphlib {
+namespace chartastic {
 
 void PiePlot::show() const {
 	int win_width = 800;

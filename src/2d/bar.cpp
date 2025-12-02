@@ -1,10 +1,10 @@
-#include <graphlib/2d/bar.hpp>
+#include <chartastic/2d/bar.hpp>
 #include <raylib.h>
 #include <algorithm>
 #include <string>
 #include <sstream>
 
-namespace graphlib {
+namespace chartastic {
 
 void BarPlot::show() const {
     const int width = 800;

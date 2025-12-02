@@ -3,7 +3,7 @@
 #pragma once
 #include <string>
 
-namespace graphlib {
+namespace chartastic {
 
 class Plot {
 public:
