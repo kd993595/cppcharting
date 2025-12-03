@@ -7,12 +7,12 @@ int main() {
     std::vector<std::string> products = {"Apple", "Banana", "Pear", "Orange"};
     std::vector<double> sales = {10, 20, 15, 25};
 
-    auto plot = chartastic::bar(products.begin(), products.end(),
-                              sales.begin(), sales.end());
+    chartastic::BarPlot plot(products.begin(), products.end(),
+                             sales.begin(), sales.end());
 
-    plot.title = "Fruit Sales";
-    plot.colors = {RED, YELLOW, GREEN, ORANGE};
-    plot.orientation = chartastic::Orientation::Horizontal;
+    plot.setTitle("Fruit Sales");
+    plot.setColors({RED, YELLOW, GREEN, ORANGE});
+    plot.setOrientation(chartastic::Orientation::Horizontal);
 
     plot.show();
 }
