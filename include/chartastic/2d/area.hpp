@@ -16,6 +16,9 @@ private:
     std::vector<double> y_values_;
     Color fill_color_ = SKYBLUE;
 
+    // Helper method for rendering the chart
+    void renderChart() const;
+
 public:
     AreaPlot() {
         title_ = "Area Plot";
@@ -44,6 +47,7 @@ public:
     }
 
     void show() const override;
+    void exportAs(const std::string& filename) const;
 
     // Getters
     const std::vector<std::string>& getXLabels() const { return x_labels_; }

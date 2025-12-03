@@ -21,6 +21,9 @@ private:
     std::vector<Color> colors_;
     Orientation orientation_ = Orientation::Vertical;
 
+    // Helper method for rendering the chart
+    void renderChart() const;
+
 public:
     BarPlot() {
         title_ = "Bar Plot";
@@ -50,6 +53,7 @@ public:
     }
 
     void show() const override;
+    void exportAs(const std::string& filename) const;
 
     // Getters
     const std::vector<std::string>& getXLabels() const { return x_labels_; }
