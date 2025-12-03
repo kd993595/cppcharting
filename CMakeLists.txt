@@ -17,6 +17,7 @@ add_library(chartastic
     src/2d/hist.cpp
     src/2d/box.cpp
     src/2d/pie.cpp
+    src/2d/facetgrid.cpp
 )
 
 find_package(raylib REQUIRED)
@@ -51,3 +52,6 @@ target_link_libraries(box_example PRIVATE chartastic raylib)
 
 add_executable(pie_example examples/pie_example.cpp)
 target_link_libraries(pie_example PRIVATE chartastic raylib)
+
+add_executable(facetgrid_example examples/facetgrid_example.cpp)
+target_link_libraries(facetgrid_example PRIVATE chartastic raylib)
