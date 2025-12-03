@@ -45,6 +45,8 @@ class Facetgrid{
   static const int grid_bottom_pad = 20;
   static const int grid_left_pad = 30;
   static const int grid_right_pad = 20;
+  std::string x_axis_name;
+  std::string y_axis_name;
 
   int GetScreenX(double x, int iGrid){
     int x_end = grids[iGrid].x_start + grids[iGrid].width;
@@ -65,8 +67,8 @@ class Facetgrid{
   }
 
 public:
-  explicit Facetgrid(std::string t, int minX, int maxX, int minY, int maxY, int maxGrids) : 
-    title(t), grids(), points(), x_axis(), y_axis(), min_x(minX), max_x(maxX), min_y(minY), max_y(maxY)
+  explicit Facetgrid(std::string t, int minX, int maxX, int minY, int maxY, int maxGrids, std::string x_name="", std::string y_name="") : 
+    title(t), grids(), points(), x_axis(), y_axis(), min_x(minX), max_x(maxX), min_y(minY), max_y(maxY), x_axis_name(x_name), y_axis_name(y_name)
   {
     if(maxGrids > 9)
       throw std::invalid_argument("Chartastic Error: max number of grids cannot be greater than 8");
@@ -140,18 +142,6 @@ public:
       x_axis.push_back(temp_x_axis);
       y_axis.push_back(temp_y_axis);
     }
-
-    /*for(double cur_diff=min_x;  cur_diff < max_x; cur_diff += diff_x){
-      std::string x_num = std::to_string(std::lround(cur_diff));
-      x_axis.push_back({GetScreenX(cur_diff), screenHeight - bottom_pad + 10, x_num});
-    }
-    x_axis.push_back({GetScreenX(max_x), screenHeight - bottom_pad + 10, std::to_string(maxX)});
-
-    for(double cur_diff=min_y; cur_diff < max_y; cur_diff += diff_y){
-      std::string y_num = std::to_string(std::lround(cur_diff));
-      y_axis.push_back({left_pad - 25, GetScreenY(cur_diff), y_num});
-    }
-    y_axis.push_back({left_pad - 25, GetScreenY(max_y), std::to_string(maxY)});*/
   }
 
   template<chartastic::NumericIterator Iter>
@@ -187,6 +177,7 @@ public:
   void show() const{
     InitWindow(screenWidth, screenHeight, "Chartastic");
     SetTargetFPS(60);
+    Font default_font = GetFontDefault();
 
     while (!WindowShouldClose())
     {
@@ -205,8 +196,8 @@ public:
       
       // Draw axises
       for(size_t i=0;i<num_grids;i++){
-        // if(!grids[i].active)
-        //   continue;
+        if(!grids[i].active)
+          continue;
         DrawLine(grids[i].x_start + grid_left_pad, grids[i].y_start + grids[i].height - grid_bottom_pad, grids[i].x_start + grids[i].width - grid_right_pad, grids[i].y_start + grids[i].height - grid_bottom_pad, BLACK); //x axis
         DrawLine(grids[i].x_start + grid_left_pad, grids[i].y_start + grids[i].height - grid_bottom_pad, grids[i].x_start + grid_left_pad, grids[i].y_start + grid_top_pad, BLACK); // y axis
         DrawText(grids[i].name.c_str(), grids[i].x_start + (grids[i].width / 2) - MeasureText(grids[i].name.c_str(), 20) / 2, grids[i].y_start, 20, BLACK);
@@ -215,18 +206,25 @@ public:
 
       // draw numbers on axises
       for(size_t i=0;i<x_axis.size();i++){
-        // if(!grids[i].active)
-        //   continue;
+        if(!grids[i].active)
+          continue;
         for(size_t j=0;j<x_axis[i].size();j++){
           DrawText(std::get<2>(x_axis[i][j]).c_str(), std::get<0>(x_axis[i][j]), std::get<1>(x_axis[i][j]), 18, BLACK);
         }
       }
       for(size_t i=0;i<y_axis.size();i++){
-        // if(!grids[i].active)
-        //   continue;
+        if(!grids[i].active)
+          continue;
         for(size_t j=0;j<y_axis[i].size();j++){
           DrawText(std::get<2>(y_axis[i][j]).c_str(), std::get<0>(y_axis[i][j]), std::get<1>(y_axis[i][j]), 18, BLACK);
         }
+      }
+
+      if(!x_axis_name.empty()){
+        DrawText(x_axis_name.c_str(), screenWidth / 2 - MeasureText(x_axis_name.c_str(), 25) / 2, screenHeight - top_pad + 60, 25, BLACK);
+      }
+      if(!y_axis_name.empty()){
+        DrawTextPro(default_font, y_axis_name.c_str(), {10,screenHeight / 2}, {static_cast<float>(MeasureText(y_axis_name.c_str(), 25)/2), 0}, 270, 25, 10, BLACK);
       }
 
       EndDrawing();

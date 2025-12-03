@@ -6,7 +6,7 @@
 int main(void)
 {
     //Facetgrid(std::string t, int minX, int maxX, int minY, int maxY, int maxGrids)
-    chartastic::Facetgrid facetgrid_plot("My Scatter Plot", 0, 15, 0, 100, 2);
+    chartastic::Facetgrid facetgrid_plot("My Scatter Plot", 0, 15, 0, 100, 2, "x axis name", "y axis name");
 
     std::vector<int> x = {1,5,6,8,9,11,5,6};
     std::vector<int> y = {10,20,30,40,50,60,70,80};

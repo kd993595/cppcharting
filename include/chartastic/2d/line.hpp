@@ -54,6 +54,29 @@ class Line{
     return static_cast<int>(std::lround(y_flip));
   }
 
+  void RecalculateLegend(){
+    if(!show_legend) return;
+    const int offset = screenWidth / 50;
+    legend.clear();
+    if(points.size() > 6){
+      double sizing = static_cast<double>(screenWidth - offset) / 6;
+      for(size_t i=0;i<6;i++){
+        std::pair<int,int> legend_point = {static_cast<int>(std::lround(sizing * i) + offset), screenHeight - 40};
+        legend.push_back(legend_point);
+      }
+      for(size_t i=6;i<points.size();i++){
+        std::pair<int,int> legend_point = {static_cast<int>(std::lround(sizing * (i-6)) + offset), screenHeight - 20};
+        legend.push_back(legend_point);
+      }
+    }else{
+      double sizing = static_cast<double>(screenWidth - offset) / points.size();
+      for(size_t i=0;i<points.size();i++){
+        std::pair<int,int> legend_point = {static_cast<int>(std::lround(sizing * (i)) + offset), screenHeight - 20};
+        legend.push_back(legend_point);
+      }
+    }
+  }
+
 public:
   explicit Line(std::string t, int minX, int maxX, int minY, int maxY, std::string x_name = "",std::string y_name = "",bool show_legend = false, ColorPalette color_palette = ColorPalette::palette1) : 
     title(t), x_axis_name(x_name), y_axis_name(y_name), points(), names(), x_axis(), y_axis(), min_x(minX), max_x(maxX), min_y(minY), max_y(maxY), show_legend(show_legend), legend()
@@ -125,30 +148,10 @@ public:
     }
     points.push_back(temp_points);
     graph_colors.push_back(palette[graph_colors.size()]);
+    RecalculateLegend();
   }
 
-  void show() {
-    if(show_legend && legend.size() != points.size()){
-      const int offset = screenWidth / 50;
-      if(points.size() > 6){
-        double sizing = static_cast<double>(screenWidth - offset) / 6;
-        for(size_t i=0;i<6;i++){
-          std::pair<int,int> legend_point = {static_cast<int>(std::lround(sizing * i) + offset), screenHeight - 40};
-          legend.push_back(legend_point);
-        }
-        for(size_t i=6;i<points.size();i++){
-          std::pair<int,int> legend_point = {static_cast<int>(std::lround(sizing * (i-6)) + offset), screenHeight - 20};
-          legend.push_back(legend_point);
-        }
-      }else{
-        double sizing = static_cast<double>(screenWidth - offset) / points.size();
-        for(size_t i=0;i<points.size();i++){
-          std::pair<int,int> legend_point = {static_cast<int>(std::lround(sizing * (i)) + offset), screenHeight - 20};
-          legend.push_back(legend_point);
-        }
-      }
-    }
-
+  void show() const {
     InitWindow(screenWidth, screenHeight, "Chartastic");
     SetTargetFPS(60);
     Font default_font = GetFontDefault();
