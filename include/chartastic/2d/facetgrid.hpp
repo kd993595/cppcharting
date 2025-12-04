@@ -119,7 +119,7 @@ public:
       temp_grid.height = y_size;
       temp_grid.x_start = cur_col * x_size + left_pad;
       temp_grid.y_start = cur_row * y_size + top_pad;
-      std::printf("Grid: %d (col=%d,row=%d), xstart: %d, ystart: %d, width = %d, height = %d\n", i,cur_col,cur_row, temp_grid.x_start, temp_grid.y_start, temp_grid.width, temp_grid.height);
+      std::printf("Grid: %zu (col=%d,row=%d), xstart: %d, ystart: %d, width = %d, height = %d\n", i,cur_col,cur_row, temp_grid.x_start, temp_grid.y_start, temp_grid.width, temp_grid.height);
 
       grids.push_back(temp_grid);
     } 
