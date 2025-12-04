@@ -3,8 +3,7 @@
 
 int main(){
     std::vector<int> grades = {81,82,82,83,83,83,84,84,84,84};
-    auto plot = chartastic::pie(grades.begin(), grades.end());
-    plot.title = "Exam Grade Pie Chart";
-    plot.color = RED;
+    chartastic::PiePlot plot(grades.begin(), grades.end());
+    plot.setTitle("Exam Grade Pie Chart");
     plot.show();
 }

@@ -23,7 +23,6 @@ void BoxPlot::renderChart() const{
     double max = vec.back();
     double range = max - min;
 
-    ClearBackground(RAYWHITE);
     DrawText(title_.c_str(), width_ / 2 - MeasureText(title_.c_str(), 30) / 2, 20, 30, BLACK);
 
     int horiz_padding = 100; /* for one side */
@@ -94,6 +93,7 @@ void BoxPlot::show() const{
 
     while (!WindowShouldClose()){
         BeginDrawing();
+        ClearBackground(RAYWHITE);
         renderChart();
         EndDrawing();
     }

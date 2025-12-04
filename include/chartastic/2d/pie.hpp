@@ -9,24 +9,47 @@
 namespace chartastic {
 
 class PiePlot : public Plot{
-public:
+private:
     std::vector<double> values;
-    std::string title = "Title";
 
-    Color color = BLUE;
+    void renderChart() const;
+
+public:
+    /* default constructor */
+    PiePlot(){
+        title_ = "Pieplot";
+    }
+
+    /* constructor */
+    template <chartastic::NumericIterator nit>
+    PiePlot(nit start, nit end){
+        title_ = "Pieplot";
+
+        for (auto it = start; it != end; ++it){
+            values.push_back(*it);
+        }
+
+        // Validate data
+        if (values.empty()){
+            throw ChartasticError("Cannot create a pieplot with empty data");
+        }
+    }
 
     void show() const override;
-};
 
-template <chartastic::NumericIterator nit>
-PiePlot pie(nit start, nit end){
-    PiePlot plot;
-
-    for (auto it = start; it != end; ++it){
-        plot.values.push_back(*it);
+    /* getters */
+    const std::vector<double>& getValues() const{
+        return values;
     }
-    return plot;
-}
+
+    /* setters */
+    void setValues(std::vector<double> vec){
+        if (vec.empty()) {
+            throw ChartasticError("Cannot have a pieplot with empty data");
+        }
+        values = vec;
+    }
+};
 
 }
 #endif
