@@ -8,7 +8,7 @@ int main(void)
 {
 
     //Scatter(std::string t, int minX, int maxX, int minY, int maxY) 
-    chartastic::Scatter scatter_plot("My Scatter Plot", 0, 15, -250, -100, "My x axis(cm)", "Y axis name(4)",true );
+    chartastic::Scatter scatter_plot("My Scatter Plot", 0, 15, -250, -100, "My x axis(cm)", "Y axis name(4)",true);
 
     std::vector<int> x = {1,5,6,8,9,11,5,6};
     std::vector<int> y = {-100,-200,-150,-140,-150,-160,-170,-240};
