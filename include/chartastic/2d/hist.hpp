@@ -36,12 +36,12 @@ public:
         }
 
         // Validate data
-        if (values.empty()) {
-            throw ChartasticError("Cannot create histogram with empty data");
+        if (values.empty()){
+            throw ChartasticError("Cannot create a histogram with empty data");
         }
 
         if (count < 0){
-            throw ChartasticError("Cannot create histogram with a negative bin count");
+            throw ChartasticError("Cannot create a histogram with a negative bin count");
         }
         /* use default bin_count since user didn't specify */
         else if (count == 0){
@@ -70,19 +70,21 @@ public:
     /* setters */
     void setValues(std::vector<double> vec){
         if (vec.empty()) {
-            throw ChartasticError("Cannot have histogram with empty data");
+            throw ChartasticError("Cannot have a histogram with empty data");
         }
         values = vec;
     }
 
     void setBinCount(int count){
-        if (count < 0) {
-            throw ChartasticError("Cannot create histogram with a negative bin count");
+        if (count < 0){
+            throw ChartasticError("Cannot have a histogram with a negative bin count");
         }
-        else if (count == 0) {
-            throw ChartasticError("Cannot create histogram with 0 bins");
+        else if (count == 0){
+            bin_count = std::ceil(std::sqrt(values.size()));
         }
-        bin_count = count;
+        else{
+            bin_count = count;
+        }
     }
 
     void setColor(Color c){
