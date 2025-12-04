@@ -9,24 +9,57 @@
 namespace chartastic {
 
 class BoxPlot : public Plot{
-public:
+private:
     std::vector<double> values;
-    std::string title = "Title";
+    Color color;
 
-    Color color = BLUE;
+    void renderChart() const;
+
+public:
+    /* default constructor */
+    BoxPlot(){
+        title_ = "Boxplot";
+        color = BLUE;
+    }
+
+    /* constructor */
+    template <chartastic::NumericIterator nit>
+    BoxPlot(nit start, nit end){
+        title_ = "Boxplot";
+
+        for (auto it = start; it != end; ++it){
+            values.push_back(*it);
+        }
+
+        // Validate data
+        if (values.empty()){
+            throw ChartasticError("Cannot create a boxplot with empty data");
+        }
+    }
 
     void show() const override;
-};
 
-template <chartastic::NumericIterator nit>
-BoxPlot box(nit start, nit end){
-    BoxPlot plot;
-
-    for (auto it = start; it != end; ++it){
-        plot.values.push_back(*it);
+    /* getters */
+    const std::vector<double>& getValues() const{
+        return values;
     }
-    return plot;
-}
+
+    Color getColor() const{
+        return color;
+    }
+
+    /* setters */
+    void setValues(std::vector<double> vec){
+        if (vec.empty()) {
+            throw ChartasticError("Cannot have a boxplot with empty data");
+        }
+        values = vec;
+    }
+
+    void setColor(Color c){
+        color = c;
+    }
+};
 
 }
 #endif
