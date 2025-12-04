@@ -11,6 +11,7 @@ namespace chartastic {
 class PiePlot : public Plot{
 private:
     std::vector<double> values;
+    std::vector<Color> palette;
 
     void renderChart() const;
 
@@ -18,12 +19,17 @@ public:
     /* default constructor */
     PiePlot(){
         title_ = "Pieplot";
+        palette = {DARKGREEN, PINK, BEIGE, GRAY, LIGHTGRAY, SKYBLUE, BLACK, RED,
+            GREEN, BLUE, ORANGE, YELLOW, BROWN, LIME, GOLD, DARKBLUE, DARKGRAY, VIOLET, DARKBROWN, DARKPURPLE, PURPLE};
     }
 
     /* constructor */
     template <chartastic::NumericIterator nit>
     PiePlot(nit start, nit end){
         title_ = "Pieplot";
+
+        palette = {DARKGREEN, PINK, BEIGE, GRAY, LIGHTGRAY, SKYBLUE, BLACK, RED,
+            GREEN, BLUE, ORANGE, YELLOW, BROWN, LIME, GOLD, DARKBLUE, DARKGRAY, VIOLET, DARKBROWN, DARKPURPLE, PURPLE};
 
         for (auto it = start; it != end; ++it){
             values.push_back(*it);
@@ -42,12 +48,23 @@ public:
         return values;
     }
 
+    const std::vector<Color>& getPalette() const{
+        return palette;
+    }
+
     /* setters */
     void setValues(std::vector<double> vec){
         if (vec.empty()) {
             throw ChartasticError("Cannot have a pieplot with empty data");
         }
         values = vec;
+    }
+
+    void setPalette(std::vector<Color> vec){
+        if (vec.empty()) {
+            throw ChartasticError("Cannot have a pieplot with empty color palette");
+        }
+        palette = vec;
     }
 };
 

@@ -34,9 +34,6 @@ void PiePlot::renderChart() const{
     int legend_box = 20;
     int legend_gap = 10;
 
-    std::vector<Color> color_vec = {DARKGREEN, PINK, BEIGE, GRAY, LIGHTGRAY, SKYBLUE, BLACK, RED,
-        GREEN, BLUE, ORANGE, YELLOW, BROWN, LIME, GOLD, DARKBLUE, DARKGRAY, VIOLET, DARKBROWN, DARKPURPLE, PURPLE};
-
     int color_index = 0; /* will wrap around */
     int slice_index = 0; /* will not wrap around */
 
@@ -47,7 +44,7 @@ void PiePlot::renderChart() const{
         angle_end += angle_portion;
 
         /* create the slice */
-        DrawCircleSector(center, radius, angle_start, angle_end, 100, color_vec[color_index]);
+        DrawCircleSector(center, radius, angle_start, angle_end, 100, palette[color_index]);
 
         double angle_mid = (angle_start + angle_end) / 2;
         double radians_mid = angle_mid * (std::numbers::pi / 180);
@@ -69,13 +66,13 @@ void PiePlot::renderChart() const{
         DrawText(pie_label, x_text - text_width / 2, y_text - 6, 22, BLACK);
 
         /* legend entry */
-        DrawRectangle(x_legend, y_legend + slice_index * (legend_box + legend_gap), legend_box, legend_box, color_vec[color_index]);
+        DrawRectangle(x_legend, y_legend + slice_index * (legend_box + legend_gap), legend_box, legend_box, palette[color_index]);
         DrawText(TextFormat("%g", key), x_legend + legend_box + 10, y_legend + slice_index * (legend_box + legend_gap), 22, BLACK);
 
         color_index++;
         slice_index++;
 
-        color_index = color_index % color_vec.size();
+        color_index = color_index % palette.size();
 
         angle_start = angle_end;
     }
