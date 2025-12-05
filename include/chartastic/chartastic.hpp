@@ -14,6 +14,7 @@
 #include <chartastic/2d/bar.hpp>
 #include <chartastic/2d/box.hpp>
 #include <chartastic/2d/facetgrid.hpp>
+#include <chartastic/2d/function.hpp>
 #include <chartastic/2d/hist.hpp>
 #include <chartastic/2d/line.hpp>
 #include <chartastic/2d/pie.hpp>
