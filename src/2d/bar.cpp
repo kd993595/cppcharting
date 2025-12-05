@@ -21,7 +21,47 @@ void BarPlot::renderChart() const {
     DrawText(title_.c_str(), width_ / 2 - MeasureText(title_.c_str(), 30) / 2, 20, 30, BLACK);
 
     if (orientation_ == Orientation::Vertical) {
-        // (Vertical bars code stays the same)
+        // Vertical bars
+        int plot_width = width_ - left_padding - right_padding;
+        int bar_width = plot_width / static_cast<int>(n_bars);
+        int plot_left = left_padding;
+        int plot_bottom = height_ - bottom_padding;
+        int plot_height = height_ - top_padding - bottom_padding;
+
+        int total_bar_space = n_bars * bar_width;
+        int start_x = left_padding + (plot_width - total_bar_space) / 2;
+
+        // Draw bars
+        for (size_t i = 0; i < n_bars; ++i) {
+            double scaled_height = y_values_[i] / max_y * plot_height;
+            int x = start_x + static_cast<int>(i * bar_width);
+            int y = plot_bottom - static_cast<int>(scaled_height);
+            Color c = (i < colors_.size()) ? colors_[i] : BLUE;
+            int margin = 2;
+            DrawRectangle(x + margin, y, bar_width - 2 * margin, static_cast<int>(scaled_height), c);
+
+            // Draw category labels below bar
+            int text_width = MeasureText(x_labels_[i].c_str(), 20);
+            DrawText(x_labels_[i].c_str(), x + bar_width / 2 - text_width / 2, plot_bottom + 10, 20, BLACK);
+        }
+
+        // Draw axes
+        DrawLine(plot_left, top_padding, plot_left, plot_bottom, BLACK); // Y-axis
+        DrawLine(plot_left, plot_bottom, width_ - right_padding, plot_bottom, BLACK); // X-axis
+
+        // Draw Y-axis ticks and labels
+        int n_div = 5;
+        for (int i = 0; i <= n_div; ++i) {
+            double val = max_y * i / n_div;
+            int y_px = plot_bottom - static_cast<int>((val / max_y) * plot_height);
+            DrawLine(plot_left - 5, y_px, plot_left, y_px, BLACK);
+
+            // Draw tick label to the left of axis
+            std::stringstream ss;
+            ss << static_cast<int>(val);
+            int text_width = MeasureText(ss.str().c_str(), 20);
+            DrawText(ss.str().c_str(), plot_left - text_width - 10, y_px - 10, 20, BLACK);
+        }
     } else {
         // Horizontal bars
         int plot_height = height_ - top_padding - bottom_padding;
