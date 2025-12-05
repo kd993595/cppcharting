@@ -12,7 +12,7 @@ int main() {
 
 	plot.setTitle("Fruit Sales");
 	plot.setColors({RED, YELLOW, GREEN, ORANGE});
-	plot.setOrientation(chartastic::Orientation::Horizontal);
+	plot.setOrientation(chartastic::Orientation::Vertical);
 
 	plot.show();
 }
