@@ -53,24 +53,17 @@ class Scatter : public Plot{
     return static_cast<int>(std::lround(y_flip));
   }
 
-  
-
 public:
   Scatter(){
     title_ = "Scatter Plot";
   }
-  Scatter(std::string t, double minX, double maxX, double minY, double maxY, std::string x_name = "",std::string y_name = "",bool show_legend = false, ColorPalette color_palette = ColorPalette::palette1) : 
+  Scatter(std::string t, double minX, double maxX, double minY, double maxY, std::string x_name = "",std::string y_name = "",bool show_legend = false) : 
     points(), point_size(), names(), min_x(minX), max_x(maxX), min_y(minY), max_y(maxY), graph_colors(), x_axis_name(x_name), y_axis_name(y_name), show_legend(show_legend)
   {
     title_ = t;
     if(show_legend){
       top_pad = 140;
     }
-    switch(color_palette){
-      case ColorPalette::palette1: palette = p1; break;
-      case ColorPalette::palette2: palette = p2; break;
-      case ColorPalette::palette3: palette = p3; break;
-    }   
   }
 
   template<chartastic::NumericIterator Iter>
@@ -145,8 +138,10 @@ public:
       names.push_back(name);
     }
     points.push_back(temp_points);
-    graph_colors.push_back(palette[graph_colors.size()]);
     point_size.push_back(sizes);
+    if(graph_colors.size() < palette.size()){
+      graph_colors.push_back(palette[graph_colors.size()]);
+    }
   }
 
   void setColors(const std::vector<Color>& colors) {
@@ -154,6 +149,16 @@ public:
       throw ChartasticError("Colors vector cannot be empty");
     }
     graph_colors = colors;
+  }
+
+  void setColors(ColorPalette palette){
+    graph_colors.resize(12);
+    switch(palette){
+      case ColorPalette::palette1: std::copy(p1.begin(),p1.end(),graph_colors.begin());
+      case ColorPalette::palette2: std::copy(p2.begin(),p2.end(),graph_colors.begin());
+      case ColorPalette::palette3: std::copy(p3.begin(),p3.end(),graph_colors.begin());
+      case ColorPalette::palette4: std::copy(p4.begin(),p4.end(),graph_colors.begin());
+    }
   }
 
   void setLegend(bool show){

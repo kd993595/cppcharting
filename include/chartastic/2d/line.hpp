@@ -52,42 +52,15 @@ class Line : public Plot{
     return static_cast<int>(std::lround(y_flip));
   }
 
-  // void RecalculateLegend(){
-  //   if(!show_legend) return;
-  //   const int offset = screenWidth / 50;
-  //   legend.clear();
-  //   if(points.size() > 6){
-  //     double sizing = static_cast<double>(screenWidth - offset) / 6;
-  //     for(size_t i=0;i<6;i++){
-  //       std::pair<int,int> legend_point = {static_cast<int>(std::lround(sizing * i) + offset), screenHeight - 40};
-  //       legend.push_back(legend_point);
-  //     }
-  //     for(size_t i=6;i<points.size();i++){
-  //       std::pair<int,int> legend_point = {static_cast<int>(std::lround(sizing * (i-6)) + offset), screenHeight - 20};
-  //       legend.push_back(legend_point);
-  //     }
-  //   }else{
-  //     double sizing = static_cast<double>(screenWidth - offset) / points.size();
-  //     for(size_t i=0;i<points.size();i++){
-  //       std::pair<int,int> legend_point = {static_cast<int>(std::lround(sizing * (i)) + offset), screenHeight - 20};
-  //       legend.push_back(legend_point);
-  //     }
-  //   }
-  // }
 
 public:
-  explicit Line(std::string t, double minX, double maxX, double minY, double maxY, std::string x_name = "",std::string y_name = "",bool show_legend = false, ColorPalette color_palette = ColorPalette::palette1) : 
+  explicit Line(std::string t, double minX, double maxX, double minY, double maxY, std::string x_name = "",std::string y_name = "",bool show_legend = false) : 
     x_axis_name(x_name), y_axis_name(y_name), points(), names(), min_x(minX), max_x(maxX), min_y(minY), max_y(maxY), show_legend(show_legend)
   {
     title_ = t;
     if(show_legend){
       top_pad = 140;
     }
-    switch(color_palette){
-      case ColorPalette::palette1: palette = p1; break;
-      case ColorPalette::palette2: palette = p2; break;
-      case ColorPalette::palette3: palette = p3; break;
-    }   
   }
 
   template<chartastic::NumericIterator Iter>
@@ -132,7 +105,9 @@ public:
       names.push_back(name);
     }
     points.push_back(temp_points);
-    graph_colors.push_back(palette[graph_colors.size()]);
+    if(graph_colors.size() < palette.size()){
+      graph_colors.push_back(palette[graph_colors.size()]);
+    }
   }
 
   void setColors(const std::vector<Color>& colors) {
@@ -140,6 +115,16 @@ public:
       throw ChartasticError("Colors vector cannot be empty");
     }
     graph_colors = colors;
+  }
+
+  void setColors(ColorPalette palette){
+    graph_colors.resize(12);
+    switch(palette){
+      case ColorPalette::palette1: std::copy(p1.begin(),p1.end(),graph_colors.begin());
+      case ColorPalette::palette2: std::copy(p2.begin(),p2.end(),graph_colors.begin());
+      case ColorPalette::palette3: std::copy(p3.begin(),p3.end(),graph_colors.begin());
+      case ColorPalette::palette4: std::copy(p4.begin(),p4.end(),graph_colors.begin());
+    }
   }
 
   void setLegend(bool show){

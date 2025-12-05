@@ -7,7 +7,8 @@ int main(void)
 {
 
     //Line(std::string t, int minX, int maxX, int minY, int maxY) : 
-    chartastic::Line line_plot("My Line Plot", 0, 15, 0, 100, "x axis name", "y axis name", true, chartastic::ColorPalette::palette2);
+    chartastic::Line line_plot("My Line Plot", 0, 15, 0, 100, "x axis name", "y axis name", true);
+    line_plot.setColors(chartastic::ColorPalette::palette2);
 
     std::vector<int> x = {1,5,6,8,9,12,13,15};
     std::vector<int> y = {10,20,30,40,10,80,70,80};
