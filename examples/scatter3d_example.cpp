@@ -14,8 +14,8 @@ int main() {
   const float c = 1;
 
   for(int t=0;t<100;++t){
-    xvals.push_back(std::sin(std::numbers::pi_v<float>/8 * t * a));
-    zvals.push_back(std::cos(std::numbers::pi_v<float>/8 * t * a));
+    xvals.push_back(std::sin(std::numbers::pi_v<float>/8 * t) * a);
+    zvals.push_back(std::cos(std::numbers::pi_v<float>/8 * t) * a);
     yvals.push_back(t * c);
   }
 

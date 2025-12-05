@@ -67,7 +67,7 @@ class Facetgrid{
   }
 
 public:
-  explicit Facetgrid(std::string t, int minX, int maxX, int minY, int maxY, int maxGrids, std::string x_name="", std::string y_name="") : 
+  Facetgrid(std::string t, int minX, int maxX, int minY, int maxY, int maxGrids, std::string x_name="", std::string y_name="") : 
     title(t), grids(), points(), x_axis(), y_axis(), min_x(minX), max_x(maxX), min_y(minY), max_y(maxY), x_axis_name(x_name), y_axis_name(y_name)
   {
     if(maxGrids > 9)

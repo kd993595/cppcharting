@@ -66,7 +66,7 @@ public:
     }
   }
 
-  template<chartastic::NumericIterator Iter>
+  template<NumericIterator Iter>
   void addScatter(Iter x_begin, Iter x_end, Iter y_begin, Iter y_end, std::string name = ""){
     if(points.size() >= 12)
       throw ChartasticError("Chartastic Error: why do you have more than 12 series?");
@@ -100,7 +100,7 @@ public:
     point_size.push_back(empty_size);
   }
 
-  template<chartastic::NumericIterator Iter>
+  template<NumericIterator Iter>
   void addScatter(Iter x_begin, Iter x_end, Iter y_begin, Iter y_end, Iter size_begin, Iter size_end, std::string name = ""){
     if(points.size() >= 12)
       throw std::invalid_argument("Chartastic Error: why do you have more than 12 series");
@@ -171,6 +171,7 @@ public:
   }
 
   void show() const;
+  void exportAs(const std::string& filename) const;
 
 };
 

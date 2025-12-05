@@ -54,7 +54,7 @@ class Line : public Plot{
 
 
 public:
-  explicit Line(std::string t, double minX, double maxX, double minY, double maxY, std::string x_name = "",std::string y_name = "",bool show_legend = false) : 
+  Line(std::string t, double minX, double maxX, double minY, double maxY, std::string x_name = "",std::string y_name = "",bool show_legend = false) : 
     x_axis_name(x_name), y_axis_name(y_name), points(), names(), min_x(minX), max_x(maxX), min_y(minY), max_y(maxY), show_legend(show_legend)
   {
     title_ = t;
@@ -137,6 +137,7 @@ public:
   }
 
   void show() const;
+  void exportAs(const std::string& filename) const;
 
 };
 
