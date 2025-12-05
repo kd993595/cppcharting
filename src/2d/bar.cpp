@@ -1,4 +1,6 @@
 #include <chartastic/2d/bar.hpp>
+#include <chrono>
+#include <iostream>
 #include <raylib.h>
 #include <algorithm>
 #include <string>
@@ -108,10 +110,24 @@ void BarPlot::show() const {
     InitWindow(width_, height_, title_.c_str());
     SetTargetFPS(60);
 
+    std::chrono::nanoseconds total_time {0};
+    int frames = 0;
+
     while (!WindowShouldClose()) {
+        auto t_start = std::chrono::system_clock::now();
+
         BeginDrawing();
         renderChart();
         EndDrawing();
+
+        auto t_end = std::chrono::system_clock::now();
+
+        total_time += std::chrono::duration_cast<std::chrono::nanoseconds>(t_end - t_start);
+        frames++;
+
+        if (frames == 100){
+            std::cout << "MEASUREMENT: Average drawing time for " << y_values_.size() << " elements: " << total_time.count() / 100 << " ns" << '\n';
+        }
     }
 
     CloseWindow();
