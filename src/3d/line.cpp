@@ -1,4 +1,4 @@
-#include <chartastic/3d/scatter.hpp>
+#include <chartastic/3d/line.hpp>
 #include <algorithm>
 #include <cmath>
 #include <raylib.h>
@@ -7,7 +7,7 @@
 
 namespace chartastic {
 
-void ScatterPlot3D::show() const {
+void LinePlot3D::show() const {
 	InitWindow(width_, height_, title_.c_str());
 	SetTargetFPS(60);
 
@@ -76,8 +76,8 @@ void ScatterPlot3D::show() const {
 
 		// Draw points
 		for(size_t i=0;i<x_values_.size();++i){
-      for(size_t j=0;j<x_values_[i].size();++j){
-        DrawSphere((Vector3){x_values_[i][j], y_values_[i][j], z_values_[i][j]}, .5f, colors_[i]);
+      for(size_t j=0;j<x_values_[i].size()-1;++j){
+        DrawCapsule((Vector3){x_values_[i][j], y_values_[i][j], z_values_[i][j]}, (Vector3){x_values_[i][j+1], y_values_[i][j+1], z_values_[i][j+1]}, .1f,.1f,8,colors_[i]);
       }
 		}
 

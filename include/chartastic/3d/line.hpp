@@ -1,5 +1,5 @@
-#ifndef CHARTASTIC_3D_SCATTER_HPP
-#define CHARTASTIC_3D_SCATTER_HPP
+#ifndef CHARTASTIC_3D_LINE_HPP
+#define CHARTASTIC_3D_LINE_HPP
 
 #include <vector>
 #include <string>
@@ -11,13 +11,13 @@
 
 namespace chartastic {
 
-class ScatterPlot3D {
+class LinePlot3D {
 private:
     std::vector<std::string> labels_;
     std::vector<std::vector<float>> x_values_;
     std::vector<std::vector<float>> y_values_;
     std::vector<std::vector<float>> z_values_;
-    std::string title_ = "3D Scatter Plot";
+    std::string title_ = "3D Line Plot";
     std::vector<Color> colors_;
     int width_ = 1200;
     int height_ = 800;
@@ -28,9 +28,9 @@ private:
     float camera_angle_y_ = 45.0f;
 
 public:
-    ScatterPlot3D() = default;
+    LinePlot3D() = default;
 
-    ScatterPlot3D(std::string t, int screenWidth=1200, int screenHeight=800) : title_(t), width_(screenWidth), height_(screenHeight) {}
+    LinePlot3D(std::string t, int screenWidth = 1200, int screenHeight = 800) : title_(t), width_(screenWidth), height_(screenHeight) {}
 
     void show() const;
 
@@ -44,9 +44,8 @@ public:
     float getCameraAngleY() const { return camera_angle_y_; }
 
     // Setters
-  
   template <NumericIterator Iter>
-  void addSeries(Iter x_begin, Iter x_end, Iter y_begin, Iter y_end, Iter z_begin, Iter z_end, std::string name="", Color series_color = (Color){0}){
+  void addSeries(Iter x_begin, Iter x_end, Iter y_begin, Iter y_end, Iter z_begin, Iter z_end, std::string name=""){
     if(x_begin == x_end || y_begin == y_end || z_begin == z_end){
       throw ChartasticError("input iterators cannot be empty must contain at least one value");
     }
@@ -70,12 +69,45 @@ public:
     if(y_begin != y_end || z_begin != z_end)
       throw ChartasticError("input iterators must be of equal length to each other");
       
-    // if(series_color == (Color){0,0,0,0}){
-    //   colors_.push_back(p1[colors_.size()]);
-    // }else{
-    //   colors_.push_back(series_color);
-    // }
     colors_.push_back(p1[colors_.size()]);
+    if(name.empty()){
+      std::string tempstr = "Series ";
+      tempstr += 65 + x_values_.size();
+      labels_.push_back(std::move(tempstr));
+    }else{
+      labels_.push_back(name);
+    }
+    x_values_.push_back(temp_x_val);
+    y_values_.push_back(temp_y_val);
+    z_values_.push_back(temp_z_val);
+  }
+
+  template<NumericIterator Iter>
+  void addSeries(Iter x_begin, Iter x_end, Iter y_begin, Iter y_end, Iter z_begin, Iter z_end, Color series_color, std::string name=""){
+    if(x_begin == x_end || y_begin == y_end || z_begin == z_end){
+      throw ChartasticError("input iterators cannot be empty must contain at least one value");
+    }
+
+    std::vector<float> temp_x_val;
+    std::vector<float> temp_y_val;
+    std::vector<float> temp_z_val;
+    while(x_begin != x_end){
+      if(z_begin == z_end || y_begin == y_end)
+        throw ChartasticError("all input must be of equal length to each other");
+
+      temp_x_val.push_back(static_cast<float>(*x_begin));
+      temp_y_val.push_back(static_cast<float>(*y_begin));
+      temp_z_val.push_back(static_cast<float>(*z_begin));
+
+      ++x_begin;
+      ++y_begin;
+      ++z_begin;
+    }
+
+    if(y_begin != y_end || z_begin != z_end)
+      throw ChartasticError("input iterators must be of equal length to each other");
+      
+    colors_.push_back(series_color);
     if(name.empty()){
       std::string tempstr = "Series ";
       tempstr += 65 + x_values_.size();
@@ -140,4 +172,4 @@ public:
 
 }
 
-#endif // CHARTASTIC_3D_SCATTER_HPP
+#endif // CHARTASTIC_3D_LINE_HPP
