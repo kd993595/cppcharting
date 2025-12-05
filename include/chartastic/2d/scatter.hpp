@@ -29,8 +29,8 @@ class Scatter{
   int max_x;
   int min_y;
   int max_y;
-  static const int screenWidth = 1600;
-  static const int screenHeight = 1200;
+  static const int screenWidth = 800;
+  static const int screenHeight = 600;
   static const int left_pad = 100;
   static const int right_pad = 50;
   int top_pad = 100;

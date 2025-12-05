@@ -20,6 +20,7 @@ add_library(chartastic
     src/2d/facetgrid.cpp
     src/2d/function.cpp
     src/3d/bar.cpp
+    src/3d/scatter.cpp
     src/3d/pie.cpp
 )
 
@@ -61,6 +62,9 @@ target_link_libraries(facetgrid_example PRIVATE chartastic raylib)
 
 add_executable(bar3d_example examples/bar3d_example.cpp)
 target_link_libraries(bar3d_example PRIVATE chartastic raylib)
+
+add_executable(scatter3d_example examples/scatter3d_example.cpp)
+target_link_libraries(scatter3d_example PRIVATE chartastic raylib)
 
 add_executable(pie3d_example examples/pie3d_example.cpp)
 target_link_libraries(pie3d_example PRIVATE chartastic raylib)

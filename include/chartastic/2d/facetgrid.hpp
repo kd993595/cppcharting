@@ -35,8 +35,8 @@ class Facetgrid{
   int max_y;
   size_t num_grids;
   size_t cur_grid = 0;
-  static const int screenWidth = 1600;
-  static const int screenHeight = 1200;
+  static const int screenWidth = 800;
+  static const int screenHeight = 600;
   static const int left_pad = 40;
   static const int right_pad = 40;
   static const int top_pad = 100;
