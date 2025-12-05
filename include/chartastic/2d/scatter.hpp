@@ -14,114 +14,72 @@
 #include <array>
 #include <chartastic/core/concepts.hpp>
 #include <chartastic/core/colors.hpp>
+#include <chartastic/2d/plot.hpp>
+#include <chartastic/core/error.hpp>
 
 
 namespace chartastic {
 
-class Scatter{
-  std::string title;
-  std::vector<std::vector<std::pair<int, int>>> points;
+class Scatter : public Plot{
+  std::vector<std::vector<std::pair<double, double>>> points;
   std::vector<std::vector<int>> point_size;
   std::vector<std::string> names;
-  std::vector<std::tuple<int, int, std::string>> x_axis;
-  std::vector<std::tuple<int, int, std::string>> y_axis;
-  int min_x;
-  int max_x;
-  int min_y;
-  int max_y;
-  static const int screenWidth = 800;
-  static const int screenHeight = 600;
+  double min_x;
+  double max_x;
+  double min_y;
+  double max_y;
   static const int left_pad = 100;
   static const int right_pad = 50;
   int top_pad = 100;
   int bottom_pad = 80;
   std::vector<Color> graph_colors;
   bool show_legend;
-  std::vector<std::pair<int, int>> legend;
   std::string x_axis_name;
   std::string y_axis_name;
   std::array<Color, 12>& palette = p1;
 
-  int GetScreenX(double x){
-    int t_max = screenWidth - right_pad;
+  int GetScreenX(double x) const{
+    int t_max = width_ - right_pad;
     int t_min = left_pad;
     double x_lerp = static_cast<double>(x - min_x) / static_cast<double>(max_x - min_x) * static_cast<double>(t_max - t_min) + static_cast<double>(t_min);
     return static_cast<int>(std::lround(x_lerp));
   }
   
-  int GetScreenY(double y){
-    int t_max = screenHeight - top_pad;
+  int GetScreenY(double y) const{
+    int t_max = height_ - top_pad;
     int t_min = bottom_pad;
     double y_lerp = static_cast<double>(y - min_y) / static_cast<double>(max_y - min_y) * static_cast<double>(t_max - t_min) + static_cast<double>(t_min);
     double y_flip = static_cast<double>(t_max) - y_lerp + static_cast<double>(t_min);
     return static_cast<int>(std::lround(y_flip));
   }
 
-  void RecalculateLegend(){
-    if(!show_legend) return;
-    const int offset = screenWidth / 50;
-    legend.clear();
-    if(points.size() > 6){
-      double sizing = static_cast<double>(screenWidth - offset) / 6;
-      for(size_t i=0;i<6;i++){
-        std::pair<int,int> legend_point = {static_cast<int>(std::lround(sizing * i) + offset), screenHeight - 40};
-        legend.push_back(legend_point);
-      }
-      for(size_t i=6;i<points.size();i++){
-        std::pair<int,int> legend_point = {static_cast<int>(std::lround(sizing * (i-6)) + offset), screenHeight - 20};
-        legend.push_back(legend_point);
-      }
-    }else{
-      double sizing = static_cast<double>(screenWidth - offset) / points.size();
-      for(size_t i=0;i<points.size();i++){
-        std::pair<int,int> legend_point = {static_cast<int>(std::lround(sizing * (i)) + offset), screenHeight - 20};
-        legend.push_back(legend_point);
-      }
-    }
-  }
-
 public:
-  explicit Scatter(std::string t, int minX, int maxX, int minY, int maxY, std::string x_name = "",std::string y_name = "",bool show_legend = false, ColorPalette color_palette = ColorPalette::palette1) : 
-    title(t), points(), point_size(), names(), x_axis(), y_axis(), min_x(minX), max_x(maxX), min_y(minY), max_y(maxY), graph_colors(), x_axis_name(x_name), y_axis_name(y_name), show_legend(show_legend), legend()
+  Scatter(){
+    title_ = "Scatter Plot";
+  }
+  Scatter(std::string t, double minX, double maxX, double minY, double maxY, std::string x_name = "",std::string y_name = "",bool show_legend = false) : 
+    points(), point_size(), names(), min_x(minX), max_x(maxX), min_y(minY), max_y(maxY), graph_colors(), x_axis_name(x_name), y_axis_name(y_name), show_legend(show_legend)
   {
+    title_ = t;
     if(show_legend){
       top_pad = 140;
     }
-    switch(color_palette){
-      case ColorPalette::palette1: palette = p1; break;
-      case ColorPalette::palette2: palette = p2; break;
-      case ColorPalette::palette3: palette = p3; break;
-    }
-    double diff_x = std::round((double)(maxX - minX) / 10);
-    double diff_y = std::round((double)(maxY - minY) / 10);
-
-    for(double cur_diff=min_x;  cur_diff < max_x; cur_diff += diff_x){
-      std::string x_num = std::to_string(std::lround(cur_diff));
-      x_axis.push_back({GetScreenX(cur_diff), screenHeight - top_pad + 10, x_num});
-    }
-    x_axis.push_back({GetScreenX(max_x), screenHeight - top_pad + 10, std::to_string(maxX)});
-
-    for(double cur_diff=min_y; cur_diff < max_y; cur_diff += diff_y){
-      std::string y_num = std::to_string(std::lround(cur_diff));
-      y_axis.push_back({left_pad - 50, GetScreenY(cur_diff)-10, y_num});
-    }
-    y_axis.push_back({left_pad - 50, GetScreenY(max_y)-10, std::to_string(maxY)});
   }
 
   template<chartastic::NumericIterator Iter>
   void addScatter(Iter x_begin, Iter x_end, Iter y_begin, Iter y_end, std::string name = ""){
     if(points.size() >= 12)
-      throw std::invalid_argument("Chartastic Error: why do you have more than 12 series");
+      throw ChartasticError("Chartastic Error: why do you have more than 12 series?");
     if(x_begin == x_end || y_begin == y_end)
       throw std::length_error("cannot input empty iterators");
 
-    std::vector<std::pair<int, int>> temp_points;
+    std::vector<std::pair<double, double>> temp_points;
     while(x_begin != x_end){
       if(y_begin == y_end){
         throw std::length_error("y vector does not match x vector length");
       }
 
-      temp_points.push_back({GetScreenX((double)*x_begin), GetScreenY((double)*y_begin)});
+      temp_points.push_back({static_cast<double>(*x_begin), static_cast<double>(*y_begin)});
 
       ++x_begin;
       ++y_begin;
@@ -140,7 +98,6 @@ public:
     graph_colors.push_back(palette[graph_colors.size()]);
     std::vector<int> empty_size;
     point_size.push_back(empty_size);
-    RecalculateLegend();
   }
 
   template<chartastic::NumericIterator Iter>
@@ -150,7 +107,7 @@ public:
     if(x_begin == x_end || y_begin == y_end || size_begin == size_end)
       throw std::length_error("Chartastic Error: cannot input empty iterators.");
 
-    std::vector<std::pair<int, int>> temp_points;
+    std::vector<std::pair<double, double>> temp_points;
     std::vector<int> sizes;
     while(x_begin != x_end){
       if(y_begin == y_end){
@@ -160,7 +117,7 @@ public:
         throw std::length_error("Chartastic Error: size vector does not match x vector length.");
       }
 
-      temp_points.push_back({GetScreenX((double)*x_begin), GetScreenY((double)*y_begin)});
+      temp_points.push_back({static_cast<double>(*x_begin), static_cast<double>(*y_begin)});
       sizes.push_back(6 + static_cast<int>(*size_begin));
 
       ++x_begin;
@@ -168,10 +125,10 @@ public:
       ++size_begin;
     }
     if(y_begin != y_end){
-      throw std::length_error("Chartastic Error: x vector smaller than y vector");
+      throw ChartasticError("Chartastic Error: x vector smaller than y vector");
     }
     if(size_begin != size_end){
-      throw std::length_error("Chartastic Error: x vector smaller than size vector");
+      throw ChartasticError("Chartastic Error: x vector smaller than size vector");
     }
     if(name.empty()){
       std::string temp_name = "Series ";
@@ -181,66 +138,39 @@ public:
       names.push_back(name);
     }
     points.push_back(temp_points);
-    graph_colors.push_back(palette[graph_colors.size()]);
     point_size.push_back(sizes);
-    RecalculateLegend();
-  }
-
-  void show() const {
-    InitWindow(screenWidth, screenHeight, "Chartastic");
-    SetTargetFPS(60);
-    Font default_font = GetFontDefault();
-
-    while (!WindowShouldClose())
-    {
-      BeginDrawing();
-      ClearBackground(RAYWHITE);
-
-      DrawText(title.c_str(), screenWidth / 2 - MeasureText(title.c_str(), 30) / 2, 20, 30, BLACK);
-
-      
-      // Draw Points
-      for(size_t i=0;i<points.size();i++){
-        for(size_t j=0;j<points[i].size();j++){
-          if(point_size[i].empty()){
-            DrawCircle(points[i][j].first, points[i][j].second, 6, graph_colors[i]);
-          }else{
-            DrawCircle(points[i][j].first, points[i][j].second, point_size[i][j],graph_colors[i]);
-          }
-        }
-      }
-      
-      // Draw axises
-      DrawLine(left_pad, screenHeight - top_pad, screenWidth - right_pad, screenHeight - top_pad, BLACK); // x axis line
-      DrawLine(left_pad, screenHeight - top_pad, left_pad, bottom_pad, BLACK); // y axis line
-
-      // draw numbers on axises
-      for(size_t i=0;i<x_axis.size();i++){
-        DrawText(std::get<2>(x_axis[i]).c_str(), std::get<0>(x_axis[i]), std::get<1>(x_axis[i]), 18, BLACK);
-      }
-      for(size_t i=0;i<y_axis.size();i++){
-        DrawText(std::get<2>(y_axis[i]).c_str(), std::get<0>(y_axis[i]), std::get<1>(y_axis[i]), 18, BLACK);
-      }
-
-      for(size_t i=0;i<legend.size();i++){
-        DrawCircle(legend[i].first, legend[i].second, 10, graph_colors[i]);
-        DrawText(names[i].c_str(), legend[i].first + 11, legend[i].second - 10, 20, BLACK);
-      }
-
-      if(!x_axis_name.empty()){
-        DrawText(x_axis_name.c_str(), screenWidth / 2 - MeasureText(x_axis_name.c_str(), 25) / 2, screenHeight - top_pad + 40, 25, BLACK);
-      }
-      if(!y_axis_name.empty()){
-        DrawTextPro(default_font, y_axis_name.c_str(), {10,screenHeight / 2}, {static_cast<float>(MeasureText(y_axis_name.c_str(), 25)/2), 0}, 270, 25, 10, BLACK);
-      }
-
-      EndDrawing();
+    if(graph_colors.size() < palette.size()){
+      graph_colors.push_back(palette[graph_colors.size()]);
     }
-
-    // De-Initialization
-    //--------------------------------------------------------------------------------------
-    CloseWindow();
   }
+
+  void setColors(const std::vector<Color>& colors) {
+    if (colors.empty()) {
+      throw ChartasticError("Colors vector cannot be empty");
+    }
+    graph_colors = colors;
+  }
+
+  void setColors(ColorPalette palette){
+    graph_colors.resize(12);
+    switch(palette){
+      case ColorPalette::palette1: std::copy(p1.begin(),p1.end(),graph_colors.begin());
+      case ColorPalette::palette2: std::copy(p2.begin(),p2.end(),graph_colors.begin());
+      case ColorPalette::palette3: std::copy(p3.begin(),p3.end(),graph_colors.begin());
+      case ColorPalette::palette4: std::copy(p4.begin(),p4.end(),graph_colors.begin());
+    }
+  }
+
+  void setLegend(bool show){
+    if(show){
+      top_pad = 140;
+    }else{
+      top_pad = 100;
+    }
+    show_legend = show;
+  }
+
+  void show() const;
 
 };
 

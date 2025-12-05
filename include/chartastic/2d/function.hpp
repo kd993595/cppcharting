@@ -8,6 +8,7 @@
 #include <chartastic/core/error.hpp>
 #include <chartastic/2d/plot.hpp>
 #include <raylib.h>
+#include <memory>
 
 namespace chartastic {
 
