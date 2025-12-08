@@ -21,7 +21,6 @@ add_library(chartastic
     src/2d/function.cpp
     src/3d/bar.cpp
     src/3d/scatter.cpp
-    src/3d/pie.cpp
     src/3d/line.cpp
 )
 
@@ -66,9 +65,6 @@ target_link_libraries(bar3d_example PRIVATE chartastic raylib)
 
 add_executable(scatter3d_example examples/scatter3d_example.cpp)
 target_link_libraries(scatter3d_example PRIVATE chartastic raylib)
-
-add_executable(pie3d_example examples/pie3d_example.cpp)
-target_link_libraries(pie3d_example PRIVATE chartastic raylib)
 
 add_executable(line3d_example examples/line3d_example.cpp)
 target_link_libraries(line3d_example PRIVATE chartastic raylib)
